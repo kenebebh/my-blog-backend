@@ -8,13 +8,13 @@ This is a full-stack blog application designed as a learning project for backend
 
 This blog platform allows users to read articles and enables authors to create, edit, and manage their own blog posts. The project emphasizes backend development skills while providing a complete, functional web application.
 
-### 🚀 Live Demo
+<!-- ### 🚀 Live Demo
 
-_[Add your deployed application URL here]_
+_[Add your deployed application URL here]_ -->
 
-### 📸 Screenshots
+<!-- ### 📸 Screenshots
 
-_[Add screenshots of your application here]_
+_[Add screenshots of your application here]_ -->
 
 ## ✨ Features
 
