@@ -34,14 +34,14 @@ you can refer to this article for a guide _[https://www.mongodb.com/developer/la
    `GET /api/users/:id`
 
 4. Update User
-
-`PATCH /api/users/:id`
-Allow updating fields like name, email, role, password.
+   `PATCH /api/users/:id`
+   Allow updating fields like name, email, role, password.
 
 5. Delete User
    `DELETE /api/users/:id`
 
 6. Search User by Name
    `GET /api/users/search?name=<username>`
+
    Example: `GET /api/users/search?name=John`
    Should return all users that match the given name (case-insensitive if possible).
