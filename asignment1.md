@@ -11,13 +11,15 @@ Now, your task is to **apply the same knowledge to users**. This will help you p
 
 Each user should have the following fields:
 
-- `name` (String, required) → the user’s full name
+- `firstName` (String, required) → the user’s first name
+- `lastName` (String, required) → the user’s last name
 - `email` (String, required, unique) → must be unique for each user
 - `password` (String, required) → hashed later, but for now store as plain text (we’ll secure it later)
 - `role` (String, default: `"reader"`) → can be `"reader"` or `"author"`
-- `createdAt` (Date, default: Date.now)
 
-### Please learn how to validate your schema and how to specify required fields, unique fields,
+### Please learn how to validate your schema and how to specify required fields, unique fields
+
+### Please also learn how to use timestamps in your schema. Timestamps add the field of createdAt and updatedAt into your document, and thee are very useful field that mongoose has simplified how we can create these field in our documents. You can test if your timestamps worked by doing a console.log of any document you created or just checking your mongoDB atlas.
 
 you can refer to this article for a guide _[https://www.mongodb.com/developer/languages/javascript/getting-started-with-mongodb-and-mongoose/]_
 
