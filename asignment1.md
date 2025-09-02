@@ -47,3 +47,7 @@ you can refer to this article for a guide _[https://www.mongodb.com/developer/la
 
    Example: `GET /api/users/search?name=John`
    Should return all users that match the given name (case-insensitive if possible).
+
+# Bonus
+
+- You could try to build frontend pages for these routes if you have the chace to, but pleae the main goal is to do the backend work and make sure your routes are all working on postman before you attemt to build a frontend. Thank you
