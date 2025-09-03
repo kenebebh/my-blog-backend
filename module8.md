@@ -206,3 +206,85 @@ Google sends your application a special token (an access token) that gives you p
 - Never store sensitive data in JWT payload
 - Implement proper logout mechanisms
 - Use secure cookie flags (HttpOnly, Secure, SameSite)
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////
+
+What is Hashing?
+Hashing is the process of converting an input string of any length into a fixed-size string of characters, called a hash value or simply a hash. It's a one-way function, meaning it's computationally infeasible to reverse the process and get the original input from the hash. Password hashing is a security measure that protects user data by ensuring that passwords are never stored in plain text.
+
+What is a Salt?
+A salt is a unique, randomly generated string of data that is appended to a password before it is hashed. Each user's password gets a different salt, even if they have the same password. The primary purpose of using a salt is to prevent rainbow table attacks, where an attacker uses a pre-computed table of hashes to quickly find a password. Because each password has a unique salt, the resulting hash is also unique, making rainbow tables ineffective.
+
+Password Hashing with bcrypt
+Bcrypt is a strong password hashing algorithm that uses a variable number of iterations to make it computationally expensive for attackers to crack. Unlike simple hashing algorithms, bcrypt incorporates a salt, which is a random string of data added to the password before hashing. This makes it difficult to use pre-computed rainbow tables to crack passwords.
+
+Here is a code example for hashing a password with bcrypt in Node.js using the bcrypt library:
+
+const bcrypt = require('bcrypt');
+
+const password = 'mysecretpassword';
+const saltRounds = 10; // The cost factor
+
+bcrypt.hash(password, saltRounds, (err, hash) => {
+if (err) {
+// Handle error
+}
+console.log('Hashed Password:', hash);
+});
+
+To check if a password matches a hash:
+
+bcrypt.compare(password, hash, (err, result) => {
+if (result) {
+// Passwords match
+} else {
+// Passwords don't match
+}
+});
+
+////////////////////////////////////////////////////////////////////////
+
+What is a JWT token?
+
+JWT stands for JSON Web Token.
+It’s a compact, secure way of transmitting information between two parties (usually the server and the client) as a JSON object.
+
+A JWT typically has 3 parts (separated by dots):
+
+Header → contains metadata about the token (e.g., algorithm used).
+
+Payload → contains the actual data/claims (e.g., user ID, role, expiration time).
+
+Signature → ensures the token hasn’t been tampered with.
+
+Example JWT (shortened):
+
+xxxxx.yyyyy.zzzzz
+
+How JWT works in a web app
+
+A user logs in with their credentials.
+
+The server verifies the credentials.
+
+The server generates a JWT with the user’s details (like userId, role, etc.) and signs it with a secret key.
+
+The JWT is sent to the client (usually stored in localStorage, sessionStorage, or a cookie).
+
+For subsequent requests, the client includes the JWT (commonly in the Authorization header as Bearer <token>).
+
+The server validates the token signature. If valid, it trusts the data inside (like user identity).
+
+Why most modern web apps use JWT
+
+✅ Stateless authentication: The server doesn’t need to keep a session in memory. The JWT itself carries all the necessary info.
+
+✅ Scalable: Since no session state is stored on the server, multiple servers (or microservices) can easily verify the token as long as they share the secret key/public key.
+
+✅ Secure (when used properly): Tokens are signed (and optionally encrypted). The server can detect if someone tries to tamper with them.
+
+✅ Flexible: JWT can be used not just for authentication, but also for securely passing information between services (API-to-API communication).
+
+✅ Widely adopted: Supported in almost all frameworks, libraries, and APIs, making it the go-to choice for modern apps (SPAs, mobile apps, microservices).
+
+👉 In short: JWT tokens let web apps handle authentication and authorization securely in a stateless, scalable way.

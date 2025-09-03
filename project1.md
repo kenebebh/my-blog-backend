@@ -61,3 +61,7 @@ Author Dashboard (/dashboard): A private page that lists all articles written by
 Create Post Page (/posts/create): A form for an author to create a new article.
 
 Edit Post Page (/posts/:id/edit): A form to update an existing article.
+
+query mongodb article _[https://www.mongodb.com/docs/atlas/atlas-ui/query/filter/_]
+
+reex mongodb article _[https://www.mongodb.com/docs/manual/reference/operator/query/regex/#mongodb-query-op.-regex]_

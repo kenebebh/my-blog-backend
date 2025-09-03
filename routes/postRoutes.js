@@ -7,6 +7,7 @@ import {
   editPost,
   deletePost,
 } from "../controllers/postsController.js";
+
 const router = Router();
 
 router.get("/", getPosts);
