@@ -1,4 +1,5 @@
 import User from "../models/user.model.js";
+import generateToken from "../utils/generateToken.js";
 
 // Create a new user
 const createUser = async (req, res) => {
@@ -20,6 +21,19 @@ const createUser = async (req, res) => {
     });
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });
+  }
+};
+
+const loginUser = async (req, res) => {
+  const { email, password } = req.body;
+
+  const user = await User.findOne({ email });
+
+  if (user && (await user.matchPassword(password))) {
+    generateToken(res, user._id);
+    res.status(200).json({ message: "User logged in" });
+  } else {
+    res.status(404).json({ message: "User not found" });
   }
 };
 
@@ -214,4 +228,5 @@ export {
   deleteUser,
   getUserbyName,
   searchUsersByName,
+  loginUser,
 };

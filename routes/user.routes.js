@@ -8,11 +8,13 @@ import {
   deleteUser,
   searchUsersByName,
   getUserbyName,
+  loginUser,
 } from "../controllers/user.controller.js";
 
 const router = Router();
 
 router.get("/", getUsers);
+router.post("/login", loginUser);
 router.get("/name", getUserbyName);
 router.post("/", createUser);
 router.get("/search", searchUsersByName);

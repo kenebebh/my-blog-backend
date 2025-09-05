@@ -288,3 +288,84 @@ Why most modern web apps use JWT
 ✅ Widely adopted: Supported in almost all frameworks, libraries, and APIs, making it the go-to choice for modern apps (SPAs, mobile apps, microservices).
 
 👉 In short: JWT tokens let web apps handle authentication and authorization securely in a stateless, scalable way.
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+A cookie in web development is a small piece of data that a web server sends to a user's browser, which the browser then stores and sends back to the server with future requests to the same domain. Think of it like a note the server gives your browser:
+
+"Here, keep this note. Every time you come back, show me this note so I remember who you are."
+
+How Cookies Work
+
+Server sends cookie: When you visit a website, the server can send a Set-Cookie header in the HTTP response
+Browser stores it: Your browser saves this cookie locally
+Browser sends it back: On subsequent requests to that domain, the browser automatically includes the cookie in the request headers
+Server reads it: The server can read the cookie data and use it
+
+Common Uses for Cookies
+
+1. Authentication/Sessions: Store login tokens or session IDs so you stay logged in
+
+```
+// User stays logged in across page refreshes
+res.cookie('authToken', 'jwt123...', { maxAge: 86400000 });
+```
+
+2. User Preferences: Remember settings like theme, language, or layout choices
+
+```
+// Remember user chose dark mode
+res.cookie('theme', 'dark', { maxAge: 365 * 24 * 60 * 60 * 1000 });
+```
+
+3. Shopping Carts: Keep track of items in e-commerce sites
+
+```
+// Remember what's in cart
+res.cookie('cart', JSON.stringify(['item1', 'item2']), { maxAge: 604800000 });
+```
+
+4. Analytics/Tracking: Track user behavior across visits
+
+```
+// Google Analytics uses cookies to track visitors
+res.cookie('_ga', 'GA1.2.1234567890.1234567890');
+```
+
+Cookie Attributes
+
+1. Domain: Which domain can access the cookie
+
+```
+res.cookie('name', 'value', { domain: '.example.com' }); // All subdomains
+```
+
+2. Path: Which URLs can access the cookie
+
+```
+res.cookie('name', 'value', { path: '/admin' }); // Only /admin routes
+```
+
+3. Expires/Max-Age: When the cookie should be deleted
+
+```
+res.cookie('name', 'value', { maxAge: 3600000 }); // 1 hour
+```
+
+4. Secure: Only send over HTTPS
+
+```
+res.cookie('name', 'value', { secure: true });
+```
+
+5. HttpOnly: Can't be accessed by JavaScript
+
+```
+res.cookie('name', 'value', { httpOnly: true }); // XSS protection
+```
+
+6. SameSite: Controls cross-site request behavior
+   res.cookie('name', 'value', { sameSite: 'strict' }); // CSRF protection
+
+```
+
+```
