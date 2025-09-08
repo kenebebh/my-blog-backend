@@ -3,6 +3,7 @@ import { connectDatabase } from "./config/dbConn.js";
 import "dotenv/config";
 import postsRoutes from "./routes/postRoutes.js";
 import usersRoutes from "./routes/user.routes.js";
+import { notFound, errorHandler } from "./middleware/errorMiddleware.js";
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -16,6 +17,9 @@ app.use("/api/users", usersRoutes);
 app.get("/", (req, res) => {
   res.send("Welcome to the Blog API");
 });
+
+app.use(notFound);
+app.use(errorHandler);
 
 // Connect to database FIRST, then start server
 const startServer = async () => {

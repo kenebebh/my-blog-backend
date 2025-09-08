@@ -6,6 +6,13 @@ const createUser = async (req, res) => {
   try {
     const { firstName, lastName, email, password, role } = req.body;
 
+    const userExists = await User.findOne({ email });
+
+    if (userExists) {
+      res.status(400);
+      throw new Error("User already exists");
+    }
+
     const newUser = await User.create({
       firstName,
       lastName,
@@ -33,7 +40,8 @@ const loginUser = async (req, res) => {
     generateToken(res, user._id);
     res.status(200).json({ message: "User logged in" });
   } else {
-    res.status(404).json({ message: "User not found" });
+    res.status(401);
+    throw new Error("Invalid email or password");
   }
 };
 
