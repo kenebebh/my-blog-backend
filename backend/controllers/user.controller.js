@@ -21,11 +21,17 @@ const createUser = async (req, res) => {
       role,
     });
 
-    res.status(201).json({
-      success: true,
-      message: "User created successfully",
-      data: newUser,
-    });
+    if (newUser) {
+      generateToken(res, newUser._id);
+      res.status(201).json({
+        success: true,
+        message: "User created successfully",
+        data: newUser,
+      });
+    } else {
+      res.status(400);
+      throw new Error("Invalid user data");
+    }
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });
   }
@@ -43,6 +49,17 @@ const loginUser = async (req, res) => {
     res.status(401);
     throw new Error("Invalid email or password");
   }
+};
+
+// @desc    Logout user / clear cookie
+// @route   POST /api/users/logout
+// @access  Public
+const logoutUser = (req, res) => {
+  res.cookie("jwt", "", {
+    httpOnly: true,
+    expires: new Date(0),
+  });
+  res.status(200).json({ message: "Logged out successfully" });
 };
 
 //Get all users
@@ -82,23 +99,28 @@ const editUser = async (req, res) => {
   try {
     const { firstName, lastName, email, password, role } = req.body;
 
-    const updatedUser = await User.findByIdAndUpdate(
-      req.params.id,
-      { firstName, lastName, email, password, role },
-      { new: true }
-    );
+    // Corrected comparison: convert ObjectId to a string
+    if (req.user._id.toString() === req.params.id) {
+      const updatedUser = await User.findByIdAndUpdate(
+        req.params.id,
+        { firstName, lastName, email, password, role },
+        { new: true }
+      );
 
-    if (!updatedUser) {
-      return res
-        .status(404)
-        .json({ success: false, message: "User not found" });
+      if (!updatedUser) {
+        return res
+          .status(404)
+          .json({ success: false, message: "User not found" });
+      }
+
+      res.status(200).json({
+        success: true,
+        message: "User updated successfully",
+        data: updatedUser,
+      });
+    } else {
+      res.status(403).json({ success: false, message: "Not Authorized" });
     }
-
-    res.status(200).json({
-      success: true,
-      message: "User updated successfully",
-      data: updatedUser,
-    });
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });
   }
@@ -237,4 +259,5 @@ export {
   getUserbyName,
   searchUsersByName,
   loginUser,
+  logoutUser,
 };
