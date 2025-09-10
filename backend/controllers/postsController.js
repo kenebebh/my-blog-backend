@@ -1,3 +1,4 @@
+import { populate } from "dotenv";
 import Post from "../models/postsModel.js";
 
 // CREATE a new blog post
@@ -12,6 +13,7 @@ const createPost = async (request, res) => {
       success: true,
       message: "Post created successfully",
       data: newPost,
+      // populatedPost: await newPost.populate("author"),
     });
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });
@@ -56,7 +58,7 @@ const editPost = async (req, res) => {
     const { title, author, body, excerpt } = req.body;
 
     const updatedPost = await Post.findByIdAndUpdate(
-      req.params.id,
+      req.post._id,
       { title, author, body, excerpt },
       { new: true } // returns updated document
     );
@@ -80,7 +82,7 @@ const editPost = async (req, res) => {
 // DELETE a blog post
 const deletePost = async (req, res) => {
   try {
-    const deletedPost = await Post.findByIdAndDelete(req.params.id);
+    const deletedPost = await Post.findByIdAndDelete(req.post._id);
 
     if (!deletedPost) {
       return res

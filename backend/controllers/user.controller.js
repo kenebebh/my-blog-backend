@@ -107,31 +107,27 @@ const editUser = async (req, res, next) => {
   try {
     const { firstName, lastName, email, password, role } = req.body;
 
-    if (req.user._id.toString() === req.params.id) {
-      if (!mongoose.Types.ObjectId.isValid(req.param.id)) {
-        res.status(404).json({ success: false, message: "User Not Found" });
-      }
+    // if (!mongoose.Types.ObjectId.isValid(req.param.id)) {
+    //   res.status(404).json({ success: false, message: "User Not Found" });
+    // }
 
-      const updatedUser = await User.findByIdAndUpdate(
-        req.params.id,
-        { firstName, lastName, email, password, role },
-        { new: true }
-      );
+    const updatedUser = await User.findByIdAndUpdate(
+      req.params.id,
+      { firstName, lastName, email, password, role },
+      { new: true }
+    );
 
-      if (!updatedUser) {
-        return res
-          .status(404)
-          .json({ success: false, message: "User not found" });
-      }
-
-      res.status(200).json({
-        success: true,
-        message: "User updated successfully",
-        data: updatedUser,
-      });
-    } else {
-      res.status(403).json({ success: false, message: "Not Authorized" });
+    if (!updatedUser) {
+      return res
+        .status(404)
+        .json({ success: false, message: "User not found" });
     }
+
+    res.status(200).json({
+      success: true,
+      message: "User updated successfully",
+      data: updatedUser,
+    });
   } catch (error) {
     next(error);
   }
@@ -140,23 +136,19 @@ const editUser = async (req, res, next) => {
 // Delete a user
 const deleteUser = async (req, res, next) => {
   try {
-    if (req.user._id.toString() === req.params.id) {
-      const deletedUser = await User.findByIdAndDelete(req.params.id);
+    const deletedUser = await User.findByIdAndDelete(req.params.id);
 
-      if (!deletedUser) {
-        return res
-          .status(404)
-          .json({ success: false, message: "User not found" });
-      }
-
-      res.status(200).json({
-        success: true,
-        message: "User deleted successfully",
-        data: deletedUser,
-      });
-    } else {
-      res.status(403).json({ success: false, message: "Not Authorized" });
+    if (!deletedUser) {
+      return res
+        .status(404)
+        .json({ success: false, message: "User not found" });
     }
+
+    res.status(200).json({
+      success: true,
+      message: "User deleted successfully",
+      data: deletedUser,
+    });
   } catch (error) {
     next(error);
   }

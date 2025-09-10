@@ -1,6 +1,8 @@
 import mongoose from "mongoose";
 import bcrypt from "bcryptjs";
 
+// 68c1a01e603c8f5d1ffae4b3
+
 const userSchema = new mongoose.Schema(
   {
     firstName: { type: String, required: [true, "First Name is required"] },
@@ -9,7 +11,7 @@ const userSchema = new mongoose.Schema(
     password: { type: String, required: true },
     role: {
       type: String,
-      enum: ["reader", "author"],
+      enum: ["reader", "author", "admin"],
       default: "reader",
     },
   },

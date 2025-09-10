@@ -2,7 +2,7 @@ import jwt from "jsonwebtoken";
 import User from "../models/user.model.js";
 import Post from "../models/postsModel.js";
 
-const protect = async (req, res, next) => {
+export const protect = async (req, res, next) => {
   let token;
 
   token = req.cookies.jwt;
@@ -14,6 +14,8 @@ const protect = async (req, res, next) => {
       const userId = decoded.userId;
 
       req.user = await User.findById(userId).select("-password");
+
+      console.log(req.user);
 
       next();
     } catch (error) {
@@ -31,7 +33,9 @@ const protect = async (req, res, next) => {
 export const authorize = (...roles) => {
   return (req, res, next) => {
     if (!req.user) {
-      return res.status(401).json({ message: "Not authenticated" });
+      return res.status(401).json({
+        message: "Not authenticated. Please create an account or login",
+      });
     }
 
     if (!roles.includes(req.user.role)) {
@@ -62,7 +66,7 @@ export const authorizePostAccess = async (req, res, next) => {
     }
 
     // Author can access their own post
-    if (post.author.userId.toString() === req.user._id.toString()) {
+    if (post.author._id.toString() === req.user._id.toString()) {
       req.post = post;
       return next();
     }
@@ -80,7 +84,7 @@ export const authorizePostAccess = async (req, res, next) => {
 // Authorization middleware - check if user can modify user account
 export const authorizeUserAccess = async (req, res, next) => {
   try {
-    const targetUserId = req.params.id || req.params.userId;
+    const targetUserId = req.params.id;
 
     // Admin can modify any user
     if (req.user.role === "admin") {
@@ -119,5 +123,3 @@ export const adminOnly = authorize("admin");
 
 // Middleware for author and admin routes
 export const authorOrAdmin = authorize("author", "admin");
-
-export { protect };
