@@ -22,7 +22,9 @@ router.post("/", createUser);
 router.post("/logout", logoutUser);
 router.get("/search", searchUsersByName);
 router.get("/:id", getUserById);
-router.patch("/:id", protect, editUser);
-router.delete("/:id", protect, deleteUser);
+
+router.use(protect);
+router.patch("/:id", editUser);
+router.delete("/:id", deleteUser);
 
 export default router;

@@ -36,7 +36,7 @@ const getPosts = async (req, res) => {
 // READ a single blog post by ID
 const getPostById = async (req, res) => {
   try {
-    const post = await Post.findById(req.params.id);
+    const post = await Post.findById(req.params.id).populate("author");
 
     if (!post) {
       return res

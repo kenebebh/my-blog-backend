@@ -2,7 +2,7 @@ import User from "../models/user.model.js";
 import generateToken from "../utils/generateToken.js";
 
 // Create a new user
-const createUser = async (req, res) => {
+const createUser = async (req, res, next) => {
   try {
     const { firstName, lastName, email, password, role } = req.body;
 
@@ -33,37 +33,45 @@ const createUser = async (req, res) => {
       throw new Error("Invalid user data");
     }
   } catch (error) {
-    res.status(500).json({ success: false, message: error.message });
+    next(error);
   }
 };
 
-const loginUser = async (req, res) => {
-  const { email, password } = req.body;
+const loginUser = async (req, res, next) => {
+  try {
+    const { email, password } = req.body;
 
-  const user = await User.findOne({ email });
+    const user = await User.findOne({ email });
 
-  if (user && (await user.matchPassword(password))) {
-    generateToken(res, user._id);
-    res.status(200).json({ message: "User logged in" });
-  } else {
-    res.status(401);
-    throw new Error("Invalid email or password");
+    if (user && (await user.matchPassword(password))) {
+      generateToken(res, user._id);
+      res.status(200).json({ message: "User logged in" });
+    } else {
+      res.status(401);
+      throw new Error("Invalid email or password");
+    }
+  } catch (error) {
+    next(error);
   }
 };
 
 // @desc    Logout user / clear cookie
 // @route   POST /api/users/logout
 // @access  Public
-const logoutUser = (req, res) => {
-  res.cookie("jwt", "", {
-    httpOnly: true,
-    expires: new Date(0),
-  });
-  res.status(200).json({ message: "Logged out successfully" });
+const logoutUser = (req, res, next) => {
+  try {
+    res.cookie("jwt", "", {
+      httpOnly: true,
+      expires: new Date(0),
+    });
+    res.status(200).json({ message: "Logged out successfully" });
+  } catch (error) {
+    next(error);
+  }
 };
 
 //Get all users
-const getUsers = async (req, res) => {
+const getUsers = async (req, res, next) => {
   try {
     const users = await User.find();
 
@@ -73,12 +81,12 @@ const getUsers = async (req, res) => {
       data: users,
     });
   } catch (error) {
-    res.status(500).json({ success: false, message: error.message });
+    next(error);
   }
 };
 
 // Get a user by ID
-const getUserById = async (req, res) => {
+const getUserById = async (req, res, next) => {
   try {
     const user = await User.findById(req.params.id);
 
@@ -90,17 +98,20 @@ const getUserById = async (req, res) => {
 
     res.status(200).json({ success: true, data: user });
   } catch (error) {
-    res.status(500).json({ success: false, message: error.message });
+    next(error);
   }
 };
 
 // Edit a users details
-const editUser = async (req, res) => {
+const editUser = async (req, res, next) => {
   try {
     const { firstName, lastName, email, password, role } = req.body;
 
-    // Corrected comparison: convert ObjectId to a string
     if (req.user._id.toString() === req.params.id) {
+      if (!mongoose.Types.ObjectId.isValid(req.param.id)) {
+        res.status(404).json({ success: false, message: "User Not Found" });
+      }
+
       const updatedUser = await User.findByIdAndUpdate(
         req.params.id,
         { firstName, lastName, email, password, role },
@@ -122,32 +133,36 @@ const editUser = async (req, res) => {
       res.status(403).json({ success: false, message: "Not Authorized" });
     }
   } catch (error) {
-    res.status(500).json({ success: false, message: error.message });
+    next(error);
   }
 };
 
 // Delete a user
-const deleteUser = async (req, res) => {
+const deleteUser = async (req, res, next) => {
   try {
-    const deletedUser = await User.findByIdAndDelete(req.params.id);
+    if (req.user._id.toString() === req.params.id) {
+      const deletedUser = await User.findByIdAndDelete(req.params.id);
 
-    if (!deletedUser) {
-      return res
-        .status(404)
-        .json({ success: false, message: "User not found" });
+      if (!deletedUser) {
+        return res
+          .status(404)
+          .json({ success: false, message: "User not found" });
+      }
+
+      res.status(200).json({
+        success: true,
+        message: "User deleted successfully",
+        data: deletedUser,
+      });
+    } else {
+      res.status(403).json({ success: false, message: "Not Authorized" });
     }
-
-    res.status(200).json({
-      success: true,
-      message: "User deleted successfully",
-      data: deletedUser,
-    });
   } catch (error) {
-    res.status(500).json({ success: false, message: error.message });
+    next(error);
   }
 };
 
-const getUserbyName = async (req, res) => {
+const getUserbyName = async (req, res, next) => {
   try {
     const user = await User.find({
       $or: [{ firstName: "David" }, { lastName: "Daniels" }],
@@ -160,11 +175,13 @@ const getUserbyName = async (req, res) => {
     }
 
     res.json(user);
-  } catch (error) {}
+  } catch (error) {
+    next(error);
+  }
 };
 
 //search for a user by name
-const searchUsersByName = async (req, res) => {
+const searchUsersByName = async (req, res, next) => {
   try {
     const name = req.query.name;
 
@@ -188,7 +205,7 @@ const searchUsersByName = async (req, res) => {
       data: users,
     });
   } catch (error) {
-    res.status(500).json({ success: false, message: error.message });
+    next(error);
   }
 };
 
