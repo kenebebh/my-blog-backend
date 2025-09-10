@@ -105,7 +105,7 @@ const getUserById = async (req, res, next) => {
 // Edit a users details
 const editUser = async (req, res, next) => {
   try {
-    const { firstName, lastName, email, password, role } = req.body;
+    const { firstName, lastName, email, password } = req.body;
 
     // if (!mongoose.Types.ObjectId.isValid(req.param.id)) {
     //   res.status(404).json({ success: false, message: "User Not Found" });
@@ -113,8 +113,8 @@ const editUser = async (req, res, next) => {
 
     const updatedUser = await User.findByIdAndUpdate(
       req.params.id,
-      { firstName, lastName, email, password, role },
-      { new: true }
+      { firstName, lastName, email, password },
+      { new: true, runValidators: true }
     );
 
     if (!updatedUser) {
@@ -169,6 +169,47 @@ const getUserbyName = async (req, res, next) => {
     res.json(user);
   } catch (error) {
     next(error);
+  }
+};
+
+// Admin only - update user role
+const updateUserRole = async (req, res) => {
+  try {
+    const { role } = req.body;
+    const userId = req.params.id;
+
+    // Prevent admin from demoting themselves
+    if (userId === req.user._id.toString() && role !== "admin") {
+      return res.status(400).json({
+        success: false,
+        message: "You cannot change your own admin role",
+      });
+    }
+
+    const user = await User.findByIdAndUpdate(
+      userId,
+      { role },
+      { new: true, runValidators: true }
+    ).select("-password");
+
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: "User not found",
+      });
+    }
+
+    res.json({
+      success: true,
+      message: `User role updated to ${role}`,
+      data: user,
+    });
+  } catch (error) {
+    res.status(400).json({
+      success: false,
+      message: "Error updating user role",
+      error: error.message,
+    });
   }
 };
 
@@ -265,7 +306,7 @@ export {
   getUserById,
   editUser,
   deleteUser,
-  getUserbyName,
+  updateUserRole,
   searchUsersByName,
   loginUser,
   logoutUser,
