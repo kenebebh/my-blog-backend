@@ -107,10 +107,6 @@ const editUser = async (req, res, next) => {
   try {
     const { firstName, lastName, email, password } = req.body;
 
-    // if (!mongoose.Types.ObjectId.isValid(req.param.id)) {
-    //   res.status(404).json({ success: false, message: "User Not Found" });
-    // }
-
     const updatedUser = await User.findByIdAndUpdate(
       req.params.id,
       { firstName, lastName, email, password },
