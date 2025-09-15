@@ -12,14 +12,22 @@ import {
   authorizePostAccess,
   adminOnly,
 } from "../middleware/authMiddleware.js";
+import paginate from "../middleware/paginate.js";
+import Post from "../models/postsModel.js";
 
 const router = Router();
 
 router.post("/", createPost);
 router.get("/:id", getPostById);
+router.get(
+  "/",
+  paginate(Post, {
+    populate: "author",
+  }),
+  getPosts
+);
 
 router.use(protect);
-router.get("/", adminOnly, getPosts);
 router.patch("/:id", authorizePostAccess, editPost);
 router.delete("/:id", authorizePostAccess, deletePost);
 

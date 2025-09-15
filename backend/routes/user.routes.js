@@ -16,6 +16,8 @@ import {
   authorizeUserAccess,
   adminOnly,
 } from "../middleware/authMiddleware.js";
+import paginate from "../middleware/paginate.js";
+import User from "../models/user.model.js";
 
 const router = Router();
 
@@ -25,6 +27,14 @@ router.post("/logout", logoutUser);
 router.get("/search", searchUsersByName);
 router.get("/:id", getUserById);
 
+router.get(
+  "/",
+  paginate(User, {
+    select: "-password",
+  }),
+  getUsers
+);
+
 //all routes below this line are protected
 router.use(protect);
 
@@ -33,7 +43,6 @@ router.patch("/:id", authorizeUserAccess, editUser);
 router.delete("/:id", authorizeUserAccess, deleteUser);
 
 //Only admin can access thee routes below
-router.get("/", adminOnly, getUsers);
 router.patch("/:id/role", adminOnly, updateUserRole);
 
 export default router;

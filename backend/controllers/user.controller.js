@@ -1,3 +1,4 @@
+import { parse } from "dotenv";
 import User from "../models/user.model.js";
 import generateToken from "../utils/generateToken.js";
 
@@ -70,20 +71,74 @@ const logoutUser = (req, res, next) => {
   }
 };
 
-//Get all users
+//Get all users with pagination middleware
 const getUsers = async (req, res, next) => {
   try {
-    const users = await User.find();
-
     res.status(200).json({
-      success: true,
-      count: users.length,
-      data: users,
+      paginatedData: res.locals.paginatedResults,
     });
   } catch (error) {
     next(error);
   }
 };
+
+// //Get all users with simple pagination
+// const getUsers = async (req, res, next) => {
+//   try {
+//     const page = parseInt(req.params.page) || 1;
+//     const limit = parseInt(req.params.limit) || 5;
+
+//     const users = await User.find()
+//       .limit(limit * 1)
+//       .skip((page - 1) * limit);
+
+//     res.status(200).json({
+//       success: true,
+//       count: users.length,
+//       data: users,
+//     });
+//   } catch (error) {
+//     next(error);
+//   }
+// };
+
+// //Get all users with pagination metadata
+// const getUsers2 = async (req, res, next) => {
+//   try {
+//     const page = parseInt(req.query.page) || 1;
+//     const limit = parseInt(req.query.limit) || 5;
+
+//     // Get total count for pagination calculations
+//     const totalUsers = await User.countDocuments();
+//     const totalPages = Math.ceil(totalUsers / limit);
+
+//     const users = await User.find()
+//       .limit(limit * 1)
+//       .skip((page - 1) * limit);
+
+//     // Calculate pagination metadata
+//     const hasNextPage = page < totalPages;
+//     const hasPrevPage = page > 1;
+
+//     res.status(200).json({
+//       success: true,
+//       count: users.length,
+//       data: users,
+//       pagination: {
+//         currentPage: page,
+//         totalPages: totalPages,
+//         totalItems: totalUsers,
+//         hasNextPage: hasNextPage,
+//         hasPrevPage: hasPrevPage,
+//         nextPage: hasNextPage ? page + 1 : null,
+//         prevPage: hasPrevPage ? page - 1 : null,
+//         limit: limit
+//       }
+//     });
+//   } catch (error) {
+//     next(error);
+//   }
+// };
 
 // Get a user by ID
 const getUserById = async (req, res, next) => {
