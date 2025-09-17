@@ -1,63 +1,64 @@
 import { Button } from "@/components/ui/button";
 import { ArrowRight, Code2 } from "lucide-react";
 import Link from "next/link";
-import { FadeIn } from "@/components/animations/fade-in";
-import {
-  StaggerContainer,
-  StaggerItem,
-} from "@/components/animations/stagger-container";
+import { FadeIn, Typewriter, SlideUp } from "../animations";
 
 export default function HeroSection() {
   return (
-    <section className="relative overflow-hidden bg-gradient-to-br from-background via-background to-muted/20 py-20 lg:py-32">
-      <div className="container relative">
-        <div className="mx-auto max-w-4xl text-center">
-          <StaggerContainer>
-            <StaggerItem>
-              <div className="mb-8 flex justify-center">
-                <div className="flex items-center space-x-2 rounded-full bg-primary/10 px-4 py-2 text-sm font-medium text-primary">
-                  <Code2 className="h-4 w-4" />
-                  <span>Welcome to Logic & Lines</span>
-                </div>
+    <section className="relative overflow-hidden bg-gradient-to-br from-background via-background to-muted/20 py-20">
+      <div className="relative">
+        <div className="mx-auto max-w-4xl text-center flex flex-col justify-center items-center">
+          <SlideUp delay={0.2}>
+            <div className="mb-8 flex justify-center">
+              <div className="flex items-center space-x-2 rounded-full bg-primary/20 border border-primary/30 px-4 py-2 text-sm font-medium text-foreground">
+                <Code2 className="h-4 w-4 text-primary" />
+                <span>Welcome to Logic & Lines</span>
               </div>
-            </StaggerItem>
+            </div>
+          </SlideUp>
 
-            <StaggerItem>
-              <h1 className="mb-6 text-4xl font-bold tracking-tight text-balance sm:text-6xl lg:text-7xl">
-                Document your{" "}
-                <span className="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
-                  developer journey
-                </span>
-              </h1>
-            </StaggerItem>
+          <div className="mb-6 text-4xl font-bold tracking-tight text-balance md:text-6xl lg:text-7xl h-48 max-w-4xl">
+            <Typewriter
+              texts={[
+                "Document your developer journey",
+                "Share knowledge, shape the future",
+                "Your ideas, our platform, infinite possibilities",
+              ]}
+              delay={0.8}
+              speed={80}
+              pauseBetween={3000}
+              className="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent"
+            />
+          </div>
 
-            <StaggerItem>
-              <p className="mb-8 text-xl text-muted-foreground text-pretty max-w-2xl mx-auto leading-relaxed">
-                Every bug fixed, every feature built, every lesson learned. Join
-                our community where developers share their experiences, support
-                each other, and grow together.
-              </p>
-            </StaggerItem>
+          <FadeIn delay={2}>
+            <p className="mb-8 text-xl text-muted-foreground text-pretty max-w-2xl mx-auto leading-relaxed">
+              Every bug fixed, every feature built, every lesson learned. Join
+              our community where developers share their experiences, support
+              each other, and grow together.
+            </p>
+          </FadeIn>
 
-            <StaggerItem>
-              <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-                <Link href="/signup">
-                  <Button size="lg" className="group">
-                    Join the Community
-                    <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
-                  </Button>
-                </Link>
-                <Link href="/blog">
-                  <Button variant="outline" size="lg">
-                    Explore Stories
-                  </Button>
-                </Link>
-              </div>
-            </StaggerItem>
-          </StaggerContainer>
+          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+            <SlideUp delay={2.5}>
+              <Link href="/signup">
+                <Button size="lg" className="group">
+                  Join the Community
+                  <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
+                </Button>
+              </Link>
+            </SlideUp>
+            <SlideUp delay={2.7}>
+              <Link href="/blog">
+                <Button variant="outline" size="lg">
+                  Explore Stories
+                </Button>
+              </Link>
+            </SlideUp>
+          </div>
         </div>
 
-        <FadeIn delay={0.8} className="mt-16">
+        <FadeIn delay={3} className="mt-16">
           <div className="mx-auto max-w-5xl">
             <div className="relative rounded-xl bg-card/50 p-2 shadow-2xl backdrop-blur-sm border">
               <div className="rounded-lg bg-gradient-to-br from-muted/50 to-muted/20 p-8">

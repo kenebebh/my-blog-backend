@@ -15,10 +15,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "DevBlog - Learn Backend Development",
-  description:
-    "A modern blog platform for teaching and learning backend development",
-  generator: "v0.app",
+  title: "Logic & Lines",
+  description: "Document your developer journey",
 };
 
 export default function RootLayout({
