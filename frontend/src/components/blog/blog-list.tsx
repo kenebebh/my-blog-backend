@@ -11,6 +11,7 @@ import {
   StaggerItem,
 } from "@/components/animations/stagger-container";
 import { Button } from "@/components/ui/button";
+import { usePosts } from "../../../hooks/usePosts";
 
 // Mock data - replace with actual API calls using TanStack Query
 const mockPosts = [
@@ -121,6 +122,12 @@ const mockPosts = [
 export function BlogList() {
   const [posts, setPosts] = useState(mockPosts);
   const [loading, setLoading] = useState(false);
+
+  const { data: postss, isLoading, error } = usePosts();
+
+  console.log(postss);
+
+  // console.log(process.env.NEXT_PUBLIC_BASE_URL);
 
   // TODO: Replace with TanStack Query
   useEffect(() => {
