@@ -22,7 +22,13 @@ const createPost = async (request, res) => {
 // // Get all blog posts
 // const getPosts = async (req, res) => {
 //   try {
-//     const posts = await Post.find().populate("author");
+//      const page = parseInt(req.query.page) || 1;
+//       const limit = parseInt(req.query.limit) || 5;
+
+//     const posts = await Post.find()
+//       .limit(limit * 1)
+//       .skip((page - 1) * limit)
+//       .populate("author");
 
 //     res.status(200).json({
 //       success: true,
@@ -37,11 +43,8 @@ const createPost = async (request, res) => {
 // Get all blog posts
 const getPosts = async (req, res) => {
   try {
-    const posts = await Post.find();
-
     res.status(200).json({
       success: true,
-      // data: posts,
       paginatedData: res.locals.paginatedResults,
     });
   } catch (error) {

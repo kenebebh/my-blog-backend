@@ -85,12 +85,7 @@ const getUsers = async (req, res, next) => {
 // //Get all users with simple pagination
 // const getUsers = async (req, res, next) => {
 //   try {
-//     const page = parseInt(req.params.page) || 1;
-//     const limit = parseInt(req.params.limit) || 5;
-
-//     const users = await User.find()
-//       .limit(limit * 1)
-//       .skip((page - 1) * limit);
+//     const users = await User.find({role: "admin"})
 
 //     res.status(200).json({
 //       success: true,
