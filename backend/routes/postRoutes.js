@@ -22,7 +22,10 @@ router.get("/:id", getPostById);
 router.get(
   "/",
   paginate(Post, {
-    populate: "author",
+    populate: {
+      path: "author",
+      select: "-password",
+    },
   }),
   getPosts
 );
