@@ -1,0 +1,167 @@
+[
+  {
+    "title": "My Journey into Full-Stack Development",
+    "excerpt": "From tinkering with HTML to building complete web apps—here’s how I made the leap.",
+    "body": "I started with basic HTML and CSS in my first year of college. Eventually, I explored JavaScript, Node.js, and React. This post shares the ups and downs of that journey and the lessons learned.",
+    "author": "68c8b90b61a429034429ba64",
+    "readTime": "8 min read",
+    "tags": ["Career", "Full-Stack", "Learning"],
+    "likes": 42,
+    "comments": 7,
+    "featured": true
+  },
+  {
+    "title": "Debugging the Impossible: A 3-Day Production Fix",
+    "excerpt": "A tricky memory leak brought our system to a halt—here’s the detective story.",
+    "body": "Our monitoring tools were screaming. Users reported slowdowns. After days of log diving and code reviews, we found a subtle asynchronous bug in a worker queue. This post details the process.",
+    "author": "68c1a01e603c8f5d1ffae4b3",
+    "readTime": "10 min read",
+    "tags": ["Debugging", "Production", "Backend"],
+    "likes": 30,
+    "comments": 4,
+    "featured": false
+  },
+  {
+    "title": "Building My First Open Source Library",
+    "excerpt": "What it’s like to publish your own npm package and get those first GitHub stars.",
+    "body": "I created a small utility to format dates in a human-friendly way. After refining and writing documentation, I published it to npm. The community feedback was incredible.",
+    "author": "68c8b90b61a429034429ba64",
+    "readTime": "6 min read",
+    "tags": ["Open Source", "JavaScript", "Community"],
+    "likes": 55,
+    "comments": 9,
+    "featured": false
+  },
+  {
+    "title": "Why I Picked Rust for My Side Project",
+    "excerpt": "Performance, safety, and a steep learning curve—Rust had it all.",
+    "body": "Rust’s ownership model was challenging at first, but the performance benefits and memory safety features made it worthwhile. Here’s how it shaped my project.",
+    "author": "68b86f9cb6e5df1aa7e0929a",
+    "readTime": "9 min read",
+    "tags": ["Rust", "Performance", "Systems"],
+    "likes": 21,
+    "comments": 3,
+    "featured": false
+  },
+  {
+    "title": "Lessons From My First Tech Interview Failure",
+    "excerpt": "Failure can be the best teacher—here’s what I learned.",
+    "body": "I bombed my first big tech interview. But that experience taught me how to study smart and manage nerves. Three months later, I landed my dream job.",
+    "author": "68c1a01e603c8f5d1ffae4b3",
+    "readTime": "7 min read",
+    "tags": ["Interviews", "Career", "Growth"],
+    "likes": 73,
+    "comments": 15,
+    "featured": false
+  },
+  {
+    "title": "Building a Real-Time Chat App with WebSockets",
+    "excerpt": "A deep dive into WebSockets, state management, and scaling a chat app.",
+    "body": "This post explains how I used Socket.IO, Redis, and horizontal scaling to build a production-ready real-time chat application.",
+    "author": "68b86f9cb6e5df1aa7e0929a",
+    "readTime": "12 min read",
+    "tags": ["WebSockets", "Real-time", "Tutorial"],
+    "likes": 46,
+    "comments": 11,
+    "featured": false
+  },
+  {
+    "title": "The Beauty of Functional Programming in JavaScript",
+    "excerpt": "Pure functions and immutability can make your code cleaner and safer.",
+    "body": "I used to write imperative JS code until I discovered map, reduce, and filter. Here’s how FP changed my perspective.",
+    "author": "68c8b90b61a429034429ba64",
+    "readTime": "8 min read",
+    "tags": ["JavaScript", "Functional Programming"],
+    "likes": 39,
+    "comments": 5,
+    "featured": false
+  },
+  {
+    "title": "Automating My Dev Setup with Dotfiles",
+    "excerpt": "Stop setting up your machine from scratch every time—use dotfiles.",
+    "body": "I share my approach to storing and versioning my shell config, editor settings, and aliases using Git and a bootstrap script.",
+    "author": "68c1a006603c8f5d1ffae4b0",
+    "readTime": "5 min read",
+    "tags": ["Productivity", "Automation", "Tools"],
+    "likes": 20,
+    "comments": 2,
+    "featured": false
+  },
+  {
+    "title": "Designing REST APIs for Scale",
+    "excerpt": "Practical tips for building REST APIs that can grow with your user base.",
+    "body": "From pagination to caching, this article covers patterns that help REST APIs handle millions of requests gracefully.",
+    "author": "68c1a006603c8f5d1ffae4b0",
+    "readTime": "11 min read",
+    "tags": ["API", "Backend", "Architecture"],
+    "likes": 50,
+    "comments": 6,
+    "featured": false
+  },
+  {
+    "title": "A Beginner’s Guide to Docker",
+    "excerpt": "Understand containers and why Docker makes deployment easier.",
+    "body": "I walk through creating a simple Node.js app, containerizing it, and running it locally and in production.",
+    "author": "68c1a01e603c8f5d1ffae4b3",
+    "readTime": "9 min read",
+    "tags": ["Docker", "DevOps"],
+    "likes": 34,
+    "comments": 3,
+    "featured": false
+  },
+  {
+    "title": "CSS Grid vs. Flexbox: When to Use Which",
+    "excerpt": "Two powerful layout systems—here’s how I decide between them.",
+    "body": "I show real examples where Grid simplifies complex two-dimensional layouts and Flexbox shines for linear arrangements.",
+    "author": "68c2025b048faaf9b07d22ca",
+    "readTime": "6 min read",
+    "tags": ["CSS", "Frontend", "Layout"],
+    "likes": 44,
+    "comments": 7,
+    "featured": false
+  },
+  {
+    "title": "From SQL to NoSQL: What I Learned",
+    "excerpt": "Switching from relational to document databases taught me a lot.",
+    "body": "Here’s a comparison of schemas, querying, and scaling strategies I encountered while migrating from PostgreSQL to MongoDB.",
+    "author": "68c2025b048faaf9b07d22ca",
+    "readTime": "8 min read",
+    "tags": ["Databases", "MongoDB", "SQL"],
+    "likes": 27,
+    "comments": 4,
+    "featured": false
+  },
+  {
+    "title": "Mastering Git Rebase",
+    "excerpt": "Clean up your commit history like a pro.",
+    "body": "This guide explains interactive rebase, resolving conflicts, and rewriting commit messages for a cleaner history.",
+    "author": "68c1a006603c8f5d1ffae4b0",
+    "readTime": "7 min read",
+    "tags": ["Git", "Version Control"],
+    "likes": 31,
+    "comments": 5,
+    "featured": false
+  },
+  {
+    "title": "Intro to TypeScript for React Developers",
+    "excerpt": "Why adding TypeScript to React projects can save time and bugs.",
+    "body": "We cover props, state typing, and creating reusable component interfaces.",
+    "author": "68c8b90b61a429034429ba64",
+    "readTime": "7 min read",
+    "tags": ["TypeScript", "React", "Frontend"],
+    "likes": 41,
+    "comments": 8,
+    "featured": false
+  },
+  {
+    "title": "How I Built a Personal Finance Tracker",
+    "excerpt": "A full-stack MERN project that helped me manage money and learn a lot.",
+    "body": "From designing MongoDB schemas to deploying on Vercel, I explain the process and share key takeaways.",
+    "author": "68c2025b048faaf9b07d22ca",
+    "readTime": "10 min read",
+    "tags": ["MERN", "Finance", "Project"],
+    "likes": 36,
+    "comments": 6,
+    "featured": false
+  }
+]

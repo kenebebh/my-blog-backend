@@ -12,137 +12,19 @@ import {
 } from "@/components/animations/stagger-container";
 import { Button } from "@/components/ui/button";
 import { usePosts } from "../../../hooks/usePosts";
-
-// Mock data - replace with actual API calls using TanStack Query
-const mockPosts = [
-  {
-    id: "1",
-    title: "My Journey from Designer to Full-Stack Developer",
-    excerpt:
-      "How I transitioned from UI/UX design to full-stack development in 18 months, the challenges I faced, and the resources that helped me succeed.",
-    author: {
-      name: "Sarah Chen",
-      avatar: "/female-developer-avatar.png",
-      bio: "Frontend Developer at TechCorp",
-    },
-    publishedAt: "2024-01-15",
-    readTime: "8 min read",
-    tags: ["Career Change", "Learning", "Frontend"],
-    likes: 42,
-    comments: 12,
-    featured: true,
-  },
-  {
-    id: "2",
-    title: "Debugging a Production Issue That Took 3 Days to Solve",
-    excerpt:
-      "A deep dive into a complex production bug that affected thousands of users, the debugging process, and the lessons learned about system monitoring.",
-    author: {
-      name: "Marcus Johnson",
-      avatar: "/male-developer-avatar.png",
-      bio: "Senior Backend Engineer",
-    },
-    publishedAt: "2024-01-12",
-    readTime: "12 min read",
-    tags: ["Debugging", "Production", "Backend"],
-    likes: 38,
-    comments: 8,
-    featured: false,
-  },
-  {
-    id: "3",
-    title: "Building My First Open Source Project",
-    excerpt:
-      "The story of creating my first open source library, from initial idea to getting 1000+ GitHub stars, and what I learned about community building.",
-    author: {
-      name: "Priya Patel",
-      avatar: "/female-developer-avatar-indian.jpg",
-      bio: "Open Source Contributor",
-    },
-    publishedAt: "2024-01-10",
-    readTime: "6 min read",
-    tags: ["Open Source", "Community", "JavaScript"],
-    likes: 56,
-    comments: 15,
-    featured: false,
-  },
-  {
-    id: "4",
-    title: "Why I Chose Rust for My Side Project",
-    excerpt:
-      "Exploring the decision to use Rust for a performance-critical side project, the learning curve, and the benefits I discovered along the way.",
-    author: {
-      name: "Alex Rodriguez",
-      avatar: "/placeholder.svg?height=40&width=40",
-      bio: "Systems Programmer",
-    },
-    publishedAt: "2024-01-08",
-    readTime: "10 min read",
-    tags: ["Rust", "Performance", "Side Projects"],
-    likes: 29,
-    comments: 6,
-    featured: false,
-  },
-  {
-    id: "5",
-    title: "Lessons from My First Tech Interview Failure",
-    excerpt:
-      "How failing my dream job interview taught me more than any success could, and the preparation strategy that finally got me hired.",
-    author: {
-      name: "Jordan Kim",
-      avatar: "/placeholder.svg?height=40&width=40",
-      bio: "Junior Developer",
-    },
-    publishedAt: "2024-01-05",
-    readTime: "7 min read",
-    tags: ["Interviews", "Career", "Learning"],
-    likes: 73,
-    comments: 22,
-    featured: false,
-  },
-  {
-    id: "6",
-    title: "Building a Real-Time Chat App with WebSockets",
-    excerpt:
-      "A technical deep-dive into building a scalable real-time chat application, covering WebSocket implementation, state management, and deployment.",
-    author: {
-      name: "Emma Thompson",
-      avatar: "/placeholder.svg?height=40&width=40",
-      bio: "Full-Stack Developer",
-    },
-    publishedAt: "2024-01-03",
-    readTime: "15 min read",
-    tags: ["WebSockets", "Real-time", "Tutorial"],
-    likes: 45,
-    comments: 11,
-    featured: false,
-  },
-];
+import { IPost } from "../../../lib/types/post";
 
 export function BlogList() {
-  const [posts, setPosts] = useState(mockPosts);
-  const [loading, setLoading] = useState(false);
+  const { data, isLoading, error } = usePosts();
+  console.log(data);
 
-  const { data: postss, isLoading, error } = usePosts();
+  if (error) return <div>Error loading posts: {error.message}</div>;
 
-  console.log(postss);
+  const posts = data?.paginatedData?.data || [];
+  const featuredPost = posts.find((post: IPost) => post.featured);
+  const regularPosts = posts.filter((post: IPost) => !post.featured);
 
-  // console.log(process.env.NEXT_PUBLIC_BASE_URL);
-
-  // TODO: Replace with TanStack Query
-  useEffect(() => {
-    // Simulate API call
-    setLoading(true);
-    setTimeout(() => {
-      setPosts(mockPosts);
-      setLoading(false);
-    }, 1000);
-  }, []);
-
-  const featuredPost = posts.find((post) => post.featured);
-  const regularPosts = posts.filter((post) => !post.featured);
-
-  if (loading) {
+  if (isLoading) {
     return (
       <section className="py-16">
         <div className="container">
@@ -206,7 +88,7 @@ export function BlogList() {
                     </p>
 
                     <div className="flex flex-wrap gap-2 mb-6">
-                      {featuredPost.tags.map((tag) => (
+                      {featuredPost.tags.map((tag: string) => (
                         <Badge key={tag} variant="outline">
                           {tag}
                         </Badge>
@@ -220,18 +102,19 @@ export function BlogList() {
                             src={
                               featuredPost.author.avatar || "/placeholder.svg"
                             }
-                            alt={featuredPost.author.name}
+                            alt={featuredPost.author.firstName}
                           />
                           <AvatarFallback>
-                            {featuredPost.author.name
+                            {featuredPost.author.firstName
                               .split(" ")
-                              .map((n) => n[0])
+                              .map((n: string) => n[0])
                               .join("")}
                           </AvatarFallback>
                         </Avatar>
                         <div>
                           <div className="font-semibold">
-                            {featuredPost.author.name}
+                            {featuredPost.author.firstName}{" "}
+                            {featuredPost.author.lastName}
                           </div>
                           <div className="text-sm text-muted-foreground">
                             {featuredPost.author.bio}
@@ -274,7 +157,7 @@ export function BlogList() {
         </div>
 
         <StaggerContainer className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {regularPosts.map((post) => (
+          {regularPosts.map((post: IPost) => (
             <StaggerItem key={post.id}>
               <Card className="h-full hover:shadow-lg transition-shadow">
                 <CardHeader>
@@ -306,7 +189,7 @@ export function BlogList() {
 
                 <CardContent>
                   <div className="flex flex-wrap gap-2 mb-4">
-                    {post.tags.slice(0, 2).map((tag) => (
+                    {post.tags.slice(0, 2).map((tag: string) => (
                       <Badge key={tag} variant="outline" className="text-xs">
                         {tag}
                       </Badge>
@@ -323,18 +206,18 @@ export function BlogList() {
                       <Avatar className="h-8 w-8">
                         <AvatarImage
                           src={post.author.avatar || "/placeholder.svg"}
-                          alt={post.author.name}
+                          alt={post.author.firstName}
                         />
                         <AvatarFallback className="text-xs">
-                          {post.author.name
+                          {post.author.firstName
                             .split(" ")
-                            .map((n) => n[0])
+                            .map((n: string) => n[0])
                             .join("")}
                         </AvatarFallback>
                       </Avatar>
                       <div>
                         <div className="font-medium text-sm">
-                          {post.author.name}
+                          {post.author.firstName} {post.author.lastName}
                         </div>
                       </div>
                     </div>

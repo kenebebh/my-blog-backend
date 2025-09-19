@@ -7,6 +7,9 @@ import { notFound, errorHandler } from "./middleware/errorMiddleware.js";
 import cookieParser from "cookie-parser";
 import cors from "cors";
 
+import Post from "./models/postsModel.js";
+import posts from "./posts.json" with { type: "json" };
+
 const app = express();
 
 const PORT = process.env.PORT || 3000;
@@ -15,6 +18,10 @@ app.use(express.json());
 app.use(cookieParser());
 // app.use(cors({ origin: "http://localhost:5173", credentials: true }));
 app.use(cors());
+
+// console.log(posts);
+
+
 
 app.use("/api/posts", postsRoutes);
 app.use("/api/users", usersRoutes);
@@ -41,6 +48,7 @@ const startServer = async () => {
     app.listen(PORT, () => {
       console.log(`Server running on port ${PORT}`);
     });
+
   } catch (error) {
     console.error("Failed to start server:", error.message);
     process.exit(1);
