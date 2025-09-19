@@ -12,9 +12,9 @@ This blog platform allows users to read articles and enables authors to create, 
 
 _[Add your deployed application URL here]_ -->
 
-<!-- ### 📸 Screenshots
+### 📸 Screenshots
 
-_[Add screenshots of your application here]_ -->
+![Postman Screenshot](/backend/public/images/screenshot.png)
 
 ## ✨ Features
 
