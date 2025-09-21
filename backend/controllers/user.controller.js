@@ -1,6 +1,7 @@
 import { parse } from "dotenv";
 import User from "../models/user.model.js";
 import generateToken from "../utils/generateToken.js";
+import { loginSchema } from "../validations/authSchemas.js";
 
 // Create a new user
 const createUser = async (req, res, next) => {
@@ -40,7 +41,15 @@ const createUser = async (req, res, next) => {
 
 const loginUser = async (req, res, next) => {
   try {
-    const { email, password } = req.body;
+    // Validate request body against schema
+    const { error, value } = loginSchema.validate(req.body);
+    if (error) {
+      return res.status(400).json({
+        message: "Validation failed",
+        errors: error.details.map((d) => d.message),
+      });
+    }
+    const { email, password } = value;
 
     const user = await User.findOne({ email });
 

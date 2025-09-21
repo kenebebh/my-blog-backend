@@ -18,11 +18,13 @@ import {
 } from "../middleware/authMiddleware.js";
 import paginate from "../middleware/paginate.js";
 import User from "../models/user.model.js";
+import { validateBody } from "../middleware/schemaValidation.js";
+import { userRegistrationSchema } from "../validations/authSchemas.js";
 
 const router = Router();
 
 router.post("/login", loginUser);
-router.post("/", createUser);
+router.post("/", validateBody(userRegistrationSchema), createUser);
 router.post("/logout", logoutUser);
 router.get("/search", searchUsersByName);
 router.get("/:id", getUserById);
