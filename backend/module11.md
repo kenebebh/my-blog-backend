@@ -38,3 +38,16 @@ API documentation serves as a comprehensive guide for developers looking to inte
 
 9. Support and Community:
    Details on how to get support, report issues, or engage with the API's developer community.
+
+Every API endpoint should include:
+
+HTTP Method (GET, POST, PATCH, DELETE)
+Endpoint URL
+Description of what it does
+Request Parameters (path, query, body)
+Request Headers (authentication, content-type)
+Request Body (for POST/PATCH requests)
+Response Format (success and error responses)
+Status Codes
+Examples (request and response)
+Authentication Requirements

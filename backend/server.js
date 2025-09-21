@@ -6,6 +6,8 @@ import usersRoutes from "./routes/user.routes.js";
 import { notFound, errorHandler } from "./middleware/errorMiddleware.js";
 import cookieParser from "cookie-parser";
 import cors from "cors";
+import { rateLimit } from 'express-rate-limit'
+
 
 import Post from "./models/postsModel.js";
 import posts from "./posts.json" with { type: "json" };
@@ -19,8 +21,15 @@ app.use(cookieParser());
 // app.use(cors({ origin: "http://localhost:5173", credentials: true }));
 app.use(cors());
 
-// console.log(posts);
+const limiter = rateLimit({
+	windowMs: 1000 * 60 * 15, // 15 minutes
+	limit: 100, // Limit each IP to 100 requests per `window` (here, per 15 minutes).
+  message: {
+    error: 'Too many requests',
+    message: 'You have exceeded the rate limit. Please try again later.'
+  },})
 
+app.use(limiter)
 
 
 app.use("/api/posts", postsRoutes);
