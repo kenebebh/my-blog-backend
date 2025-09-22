@@ -49,6 +49,7 @@ const loginUser = async (req, res, next) => {
         errors: error.details.map((d) => d.message),
       });
     }
+
     const { email, password } = value;
 
     const user = await User.findOne({ email });

@@ -22,8 +22,8 @@ app.use(cookieParser());
 app.use(cors());
 
 const limiter = rateLimit({
-	windowMs: 1000 * 60 * 15, // 15 minutes
-	limit: 100, // Limit each IP to 100 requests per `window` (here, per 15 minutes).
+	windowMs: 1000 * 60 * 15 , // 1 minute
+	limit: 50, // Limit each IP to 100 requests per `window` (here, per 15 minutes).
   message: {
     error: 'Too many requests',
     message: 'You have exceeded the rate limit. Please try again later.'
