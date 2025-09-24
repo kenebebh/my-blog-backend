@@ -41,16 +41,7 @@ const createUser = async (req, res, next) => {
 
 const loginUser = async (req, res, next) => {
   try {
-    // Validate request body against schema
-    const { error, value } = loginSchema.validate(req.body);
-    if (error) {
-      return res.status(400).json({
-        message: "Validation failed",
-        errors: error.details.map((d) => d.message),
-      });
-    }
-
-    const { email, password } = value;
+    const { email, password } = req.body;
 
     const user = await User.findOne({ email });
 

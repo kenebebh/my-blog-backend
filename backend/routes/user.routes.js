@@ -19,7 +19,10 @@ import {
 import paginate from "../middleware/paginate.js";
 import User from "../models/user.model.js";
 import { validateBody } from "../middleware/schemaValidation.js";
-import { userRegistrationSchema } from "../validations/authSchemas.js";
+import {
+  userRegistrationSchema,
+  loginSchema,
+} from "../validations/authSchemas.js";
 
 const router = Router();
 

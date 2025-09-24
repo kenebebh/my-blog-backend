@@ -14,8 +14,11 @@ import {
 } from "../middleware/authMiddleware.js";
 import paginate from "../middleware/paginate.js";
 import Post from "../models/postsModel.js";
+// import apicache from "apicache";
 
 const router = Router();
+
+// let cache = apicache.middleware;
 
 router.post("/", createPost);
 router.get("/:id", getPostById);

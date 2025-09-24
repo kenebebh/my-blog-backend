@@ -51,3 +51,21 @@ you can refer to this article for a guide _[https://www.mongodb.com/developer/la
 # Bonus
 
 - You could try to build frontend pages for these routes if you have the chace to, but pleae the main goal is to do the backend work and make sure your routes are all working on postman before you attemt to build a frontend. Thank you
+
+ <!-- {
+  "firstName": "Jon",
+            "lastName": "Snow",
+            "email": "jonsnow.com",
+            "password": "password123456789",
+            "role": "admin"
+  } -->
+
+   <!-- {
+    "email": "amadiohah@example.com",
+    "password": "password12345"
+  } -->
+
+   <!-- {
+    "email": {"$gt": ""},
+    "password": "{{readerPassword}}"
+  } -->

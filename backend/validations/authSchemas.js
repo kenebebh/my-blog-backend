@@ -2,11 +2,13 @@ import Joi from "joi";
 
 export const loginSchema = Joi.object({
   email: Joi.string().email().required(),
-  password: Joi.string().pattern(new RegExp("^[a-zA-Z0-9]{3,30}$")).required(),
-  // .messages({
-  //   "string.pattern.base":
-  //     "Password must be between 3 and 30 characters and contain only letters and numbers (no symbols or spaces).",
-  // }),
+  password: Joi.string()
+    .pattern(new RegExp("^[a-zA-Z0-9]{8,30}$"))
+    .required()
+    .messages({
+      "string.pattern.base":
+        "Password must be between 3 and 30 characters and contain only letters and numbers (no symbols or spaces).",
+    }),
 });
 
 //another way to do it
@@ -41,4 +43,5 @@ export const userRegistrationSchema = Joi.object({
       "string.pattern.base":
         "Password must be between 3 and 30 characters and contain only letters and numbers (no symbols or spaces).",
     }),
+  role: Joi.string().valid("reader", "author", "admin").required(),
 });

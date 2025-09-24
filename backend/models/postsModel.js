@@ -30,7 +30,7 @@ const PostSchema = new Schema(
     },
     readTime: {
       type: String,
-      required: [true, "Estimated read time is required"],
+      // required: [true, "Estimated read time is required"],
     },
     tags: {
       type: [String],
