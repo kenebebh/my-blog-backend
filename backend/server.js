@@ -8,6 +8,8 @@ import cookieParser from "cookie-parser";
 import cors from "cors";
 import { rateLimit } from 'express-rate-limit'
 import helmet from "helmet";
+import ExpressMongoSanitize from "express-mongo-sanitize";
+import expressMongoSanitize from "@exortek/express-mongo-sanitize";
 
 
 
@@ -23,6 +25,7 @@ app.use(cookieParser());
 // app.use(cors({ origin: "http://localhost:5173", credentials: true }));
 app.use(cors());
 app.use(helmet());
+app.use(expressMongoSanitize());
 
 
 
