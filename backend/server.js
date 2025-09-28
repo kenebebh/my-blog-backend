@@ -9,19 +9,7 @@ import cors from "cors";
 import { rateLimit } from "express-rate-limit";
 import helmet from "helmet";
 import expressMongoSanitize from "@exortek/express-mongo-sanitize";
-import multer from "multer";
-
-const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, "backend/uploads");
-  },
-  filename: function (req, file, cb) {
-    const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
-    cb(null, file.fieldname + "-" + uniqueSuffix);
-  },
-});
-
-const upload = multer({ storage: storage });
+import uploadImageRoutes from "./routes/uploadImage.routes.js";
 
 const app = express();
 
@@ -49,29 +37,7 @@ app.use(limiter);
 
 app.use("/api/posts", postsRoutes);
 app.use("/api/users", usersRoutes);
-// app.post("/api/uploads", upload.single("image"), (req, res) => {
-//   console.log(req.file);
-//   console.log(req.body);
-//   res.json({ message: "Upload route" });
-// });
-
-// app.post("/api/uploads", upload.array("photos", 12), function (req, res, next) {
-//   console.log(req.files);
-//   console.log(req.body);
-//   res.json({ message: "Upload route" });
-// });
-
-const uploadMiddleware = upload.fields([
-  { name: "photos", maxCount: 5 },
-  { name: "image", maxCount: 2 },
-]);
-app.post("/api/uploads", uploadMiddleware, function (req, res, next) {
-  console.log(req.files);
-  console.log(req.body);
-  res.json({ message: "Upload route" });
-});
-
-// Root route
+app.use("/api/uploads", uploadImageRoutes);
 
 app.get("/", (req, res) => {
   res.send("Welcome to the Blog API...");
