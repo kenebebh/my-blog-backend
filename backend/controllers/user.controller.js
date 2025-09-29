@@ -2,6 +2,7 @@ import { parse } from "dotenv";
 import User from "../models/user.model.js";
 import generateToken from "../utils/generateToken.js";
 import { loginSchema } from "../validations/authSchemas.js";
+import CloudinaryService from "../services/cloudinaryService.js";
 
 // Create a new user
 const createUser = async (req, res, next) => {
@@ -11,30 +12,88 @@ const createUser = async (req, res, next) => {
     const userExists = await User.findOne({ email });
 
     if (userExists) {
+      // Clean up uploaded file if user exists
+      if (req.file) {
+        CloudinaryService.deleteLocalFile(req.file.path);
+      }
       res.status(400);
       throw new Error("User already exists");
     }
-
-    const newUser = await User.create({
+    //prepare uer data
+    const userData = {
       firstName,
       lastName,
       email,
       password,
-      role,
-    });
+      role: role || "reader",
+    };
 
-    if (newUser) {
-      generateToken(res, newUser._id);
-      res.status(201).json({
-        success: true,
-        message: "User created successfully",
-        data: newUser,
-      });
+    //Handle profile picture upload if file is provided
+    if (req.file) {
+      try {
+        // Create user first to get the ID
+        const tempUser = new User(userData);
+        const savedUser = await tempUser.save();
+
+        // Upload profile picture to cloudinary
+        const uploadResult = await CloudinaryService.uploadProfilePicture(
+          req.file.path,
+          savedUser._id
+        );
+
+        console.log(uploadResult);
+
+        // Update user with profile picture data (just public_id and secure_url)
+        savedUser.profileImage = {
+          public_id: uploadResult.public_id,
+          secure_url: uploadResult.secure_url,
+        };
+
+        await savedUser.save();
+
+        // Generate JWT token
+        generateToken(res, savedUser._id);
+
+        res.status(201).json({
+          success: true,
+          message: "User created successfully with profile picture",
+          data: savedUser,
+        });
+      } catch (uploadError) {
+        console.error("Profile picture upload failed:", uploadError);
+
+        // Still create user without profile picture
+        const newUser = await User.create(userData);
+        generateToken(res, newUser._id);
+
+        res.status(201).json({
+          success: true,
+          message: "User created successfully (profile picture upload failed)",
+          data: newUser,
+          warning: "Profile picture could not be uploaded",
+        });
+      }
     } else {
-      res.status(400);
-      throw new Error("Invalid user data");
+      //create user without profile image
+      const newUser = await User.create(userData);
+
+      if (newUser) {
+        generateToken(res, newUser._id);
+        res.status(201).json({
+          success: true,
+          message: "User created successfully",
+          data: newUser,
+        });
+      } else {
+        res.status(400);
+        throw new Error("Invalid user data");
+      }
     }
   } catch (error) {
+    // Clean up uploaded file on any error
+    if (req.file) {
+      CloudinaryService.deleteLocalFile(req.file.path);
+    }
     next(error);
   }
 };
@@ -82,59 +141,6 @@ const getUsers = async (req, res, next) => {
     next(error);
   }
 };
-
-// //Get all users with simple pagination
-// const getUsers = async (req, res, next) => {
-//   try {
-//     const users = await User.find({role: "admin"})
-
-//     res.status(200).json({
-//       success: true,
-//       count: users.length,
-//       data: users,
-//     });
-//   } catch (error) {
-//     next(error);
-//   }
-// };
-
-// //Get all users with pagination metadata
-// const getUsers2 = async (req, res, next) => {
-//   try {
-//     const page = parseInt(req.query.page) || 1;
-//     const limit = parseInt(req.query.limit) || 5;
-
-//     // Get total count for pagination calculations
-//     const totalUsers = await User.countDocuments();
-//     const totalPages = Math.ceil(totalUsers / limit);
-
-//     const users = await User.find()
-//       .limit(limit * 1)
-//       .skip((page - 1) * limit);
-
-//     // Calculate pagination metadata
-//     const hasNextPage = page < totalPages;
-//     const hasPrevPage = page > 1;
-
-//     res.status(200).json({
-//       success: true,
-//       count: users.length,
-//       data: users,
-//       pagination: {
-//         currentPage: page,
-//         totalPages: totalPages,
-//         totalItems: totalUsers,
-//         hasNextPage: hasNextPage,
-//         hasPrevPage: hasPrevPage,
-//         nextPage: hasNextPage ? page + 1 : null,
-//         prevPage: hasPrevPage ? page - 1 : null,
-//         limit: limit
-//       }
-//     });
-//   } catch (error) {
-//     next(error);
-//   }
-// };
 
 // Get a user by ID
 const getUserById = async (req, res, next) => {
@@ -289,61 +295,110 @@ const searchUsersByName = async (req, res, next) => {
   }
 };
 
-// Search for users by name better version
-const searchUsersByName2 = async (req, res) => {
+// Update user profile picture
+const updateProfilePicture = async (req, res, next) => {
   try {
-    // Get the search term from query parameters
-    const { name } = req.query;
+    const userId = req.user?.id || req.params.id;
 
-    // Validate that search term is provided
-    if (!name || name.trim() === "") {
+    if (!req.file) {
       return res.status(400).json({
         success: false,
-        message: "Search term 'name' is required",
+        message: "No image file provided",
       });
     }
 
-    // Clean up the search term
-    const searchTerm = name.trim();
+    // Find user
+    const user = await User.findById(userId);
+    if (!user) {
+      CloudinaryService.deleteLocalFile(req.file.path);
+      return res.status(404).json({
+        success: false,
+        message: "User not found",
+      });
+    }
 
-    // Get optional limit parameter (default to 10 results)
-    const limit = parseInt(req.query.limit) || 10;
+    // Delete old profile picture from cloudinary if exists
+    if (user.profilePicture?.public_id) {
+      await CloudinaryService.deleteImage(user.profilePicture.public_id);
+    }
 
-    // Build search query using MongoDB regex
-    // This searches across firstName, lastName, and username fields
-    const searchQuery = {
-      $or: [
-        { firstName: { $regex: searchTerm, $options: "i" } },
-        { lastName: { $regex: searchTerm, $options: "i" } },
-      ],
+    // Upload new profile picture
+    const uploadResult = await CloudinaryService.uploadProfilePicture(
+      req.file.path,
+      userId
+    );
+
+    // Update user profile picture (simplified)
+    user.profilePicture = {
+      public_id: uploadResult.public_id,
+      secure_url: uploadResult.secure_url,
     };
 
-    // Execute the search
-    const users = await User.find(searchQuery)
-      .select("-password") // Exclude password field
-      .limit(limit);
+    await user.save();
 
-    // Count total matching users (for pagination info)
-    const totalFound = await User.countDocuments(searchQuery);
-
-    // Return results
     res.status(200).json({
       success: true,
-      message: `Search completed for "${searchTerm}"`,
+      message: "Profile picture updated successfully",
       data: {
-        searchTerm: searchTerm,
-        results: users,
-        totalFound: totalFound,
-        resultsShown: users.length,
-        limitApplied: limit,
+        profilePicture: user.profilePicture,
       },
     });
   } catch (error) {
-    console.error("Search user error:", error);
-    res.status(500).json({
-      success: false,
-      message: "An error occurred while searching for users",
-    });
+    // Clean up uploaded file on error
+    if (req.file) {
+      CloudinaryService.deleteLocalFile(req.file.path);
+    }
+    next(error);
+  }
+};
+
+// Remove user profile picture
+const removeProfilePicture = async (req, res, next) => {
+  try {
+    const userId = req.user?.id || req.params.id;
+
+    // Find user
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: "User not found",
+      });
+    }
+
+    // Check if user has a profile picture
+    if (!user.profilePicture?.public_id) {
+      return res.status(400).json({
+        success: false,
+        message: "User has no profile picture to remove",
+      });
+    }
+
+    // Delete from cloudinary
+    const deleted = await CloudinaryService.deleteImage(
+      user.profilePicture.public_id
+    );
+
+    if (deleted) {
+      // Remove profile picture from user document
+      user.profilePicture = {
+        public_id: null,
+        secure_url: null,
+      };
+      await user.save();
+
+      res.status(200).json({
+        success: true,
+        message: "Profile picture removed successfully",
+      });
+    } else {
+      res.status(500).json({
+        success: false,
+        message: "Failed to remove profile picture from cloud storage",
+      });
+    }
+  } catch (error) {
+    next(error);
   }
 };
 
@@ -357,4 +412,6 @@ export {
   searchUsersByName,
   loginUser,
   logoutUser,
+  updateProfilePicture,
+  removeProfilePicture,
 };
