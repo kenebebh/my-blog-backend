@@ -1,7 +1,5 @@
-import { parse } from "dotenv";
 import User from "../models/user.model.js";
 import generateToken from "../utils/generateToken.js";
-import { loginSchema } from "../validations/authSchemas.js";
 import CloudinaryService from "../services/cloudinaryService.js";
 
 // Create a new user
@@ -19,7 +17,8 @@ const createUser = async (req, res, next) => {
       res.status(400);
       throw new Error("User already exists");
     }
-    //prepare uer data
+
+    //prepare user data
     const userData = {
       firstName,
       lastName,

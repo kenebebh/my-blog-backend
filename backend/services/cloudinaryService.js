@@ -53,16 +53,16 @@ class CloudinaryService {
   }
 
   // Generate URL with specific size (when needed)
-  static getResizedUrl(publicId, width = 400, height = 400) {
-    return cloudinary.url(publicId, {
-      width,
-      height,
-      crop: "fill",
-      gravity: "face",
-      quality: "auto",
-      fetch_format: "auto",
-    });
-  }
+  // static getResizedUrl(publicId, width = 400, height = 400) {
+  //   return cloudinary.url(publicId, {
+  //     width,
+  //     height,
+  //     crop: "fill",
+  //     gravity: "face",
+  //     quality: "auto",
+  //     fetch_format: "auto",
+  //   });
+  // }
 }
 
 export default CloudinaryService;
@@ -70,7 +70,7 @@ export default CloudinaryService;
 // import cloudinary from "../config/cloudinaryConfig.js";
 // import fs from "fs";
 
-// // Helper function to delete local files
+// // // Helper function to delete local files
 // export const deleteLocalFile = (filePath) => {
 //   try {
 //     if (fs.existsSync(filePath)) {
@@ -89,7 +89,7 @@ export default CloudinaryService;
 //       public_id: `profile_${userId}_${Date.now()}`,
 //       transformation: [
 //         { width: 500, height: 500, crop: "fill", gravity: "face" },
-//         { quality: "auto", fetch_format: "auto" }
+//         { quality: "auto", fetch_format: "auto" },
 //       ],
 //       resource_type: "image",
 //     });

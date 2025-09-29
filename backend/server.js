@@ -9,11 +9,11 @@ import cors from "cors";
 import { rateLimit } from "express-rate-limit";
 import helmet from "helmet";
 import expressMongoSanitize from "@exortek/express-mongo-sanitize";
-import uploadImageRoutes from "./routes/uploadImage.routes.js";
+// import uploadImageRoutes from "./routes/uploadImage.routes.js";
 
 const app = express();
 
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 4000;
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -37,7 +37,7 @@ app.use(limiter);
 
 app.use("/api/posts", postsRoutes);
 app.use("/api/users", usersRoutes);
-app.use("/api/uploads", uploadImageRoutes);
+// app.use("/api/uploads", uploadImageRoutes);
 
 app.get("/", (req, res) => {
   res.send("Welcome to the Blog API...");
