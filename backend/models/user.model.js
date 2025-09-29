@@ -14,7 +14,7 @@ const userSchema = new mongoose.Schema(
       enum: ["reader", "author", "admin"],
       default: "reader",
     },
-    profileImage: {
+    profilePicture: {
       public_id: {
         type: String,
         default: null,

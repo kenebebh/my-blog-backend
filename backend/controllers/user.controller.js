@@ -44,7 +44,7 @@ const createUser = async (req, res, next) => {
         console.log(uploadResult);
 
         // Update user with profile picture data (just public_id and secure_url)
-        savedUser.profileImage = {
+        savedUser.profilePicture = {
           public_id: uploadResult.public_id,
           secure_url: uploadResult.secure_url,
         };
