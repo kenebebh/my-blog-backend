@@ -10,6 +10,8 @@ import {
   updateUserRole,
   loginUser,
   logoutUser,
+  updateProfilePicture,
+  removeProfilePicture,
 } from "../controllers/user.controller.js";
 import {
   protect,
@@ -23,11 +25,17 @@ import {
   userRegistrationSchema,
   loginSchema,
 } from "../validations/authSchemas.js";
+import upload from "../middleware/multer.js";
 
 const router = Router();
 
 router.post("/login", loginUser);
-router.post("/", validateBody(userRegistrationSchema), createUser);
+router.post(
+  "/",
+  upload.single("profilePicture"),
+  validateBody(userRegistrationSchema),
+  createUser
+);
 router.post("/logout", logoutUser);
 router.get("/search", searchUsersByName);
 router.get("/:id", getUserById);
@@ -45,6 +53,18 @@ router.use(protect);
 
 // only logged in user or admin can access these routes
 router.patch("/:id", authorizeUserAccess, editUser);
+router.patch(
+  "/:id/profile-picture",
+  authorizeUserAccess,
+  upload.single("profilePicture"),
+  updateProfilePicture
+);
+router.delete(
+  "/:id/remove-profile-picture",
+  authorizeUserAccess,
+  removeProfilePicture
+);
+
 router.delete("/:id", authorizeUserAccess, deleteUser);
 
 //Only admin can access thee routes below
