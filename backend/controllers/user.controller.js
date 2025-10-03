@@ -105,7 +105,7 @@ const loginUser = async (req, res, next) => {
 
     if (user && (await user.matchPassword(password))) {
       generateToken(res, user._id);
-      res.status(200).json({ message: "User logged in" });
+      res.status(200).json({ message: "User logged in", data: user });
     } else {
       res.status(401);
       throw new Error("Invalid email or password");
@@ -297,7 +297,7 @@ const searchUsersByName = async (req, res, next) => {
 // Update user profile picture
 const updateProfilePicture = async (req, res, next) => {
   try {
-    const userId = req.user?.id || req.params.id;
+    const userId = req.params.id;
 
     if (!req.file) {
       return res.status(400).json({
@@ -354,7 +354,7 @@ const updateProfilePicture = async (req, res, next) => {
 // Remove user profile picture
 const removeProfilePicture = async (req, res, next) => {
   try {
-    const userId = req.user?.id || req.params.id;
+    const userId = req.params.id;
 
     // Find user
     const user = await User.findById(userId);

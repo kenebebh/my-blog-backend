@@ -1,36 +1,36 @@
-// import { Router } from "express";
-// import cloudinary from "../config/cloudinaryConfig.js";
-// import upload from "../middleware/multer.js";
+import { Router } from "express";
+import cloudinary from "../config/cloudinaryConfig.js";
+import upload from "../middleware/multer.js";
 
-// const router = Router();
+const router = Router();
 
-// router.post("/", upload.single("image"), async (req, res) => {
-//   try {
-//     // Upload an image
-//     const uploadResult = await cloudinary.uploader
-//       .upload(req.file.path, {
-//         public_id: "profilePictures",
-//       })
-//       .catch((error) => {
-//         console.log(error);
-//         return res.status(500).json({
-//           success: false,
-//           message: "An Error has occured",
-//         });
-//       });
+router.post("/", upload.single("image"), async (req, res) => {
+  try {
+    // Upload an image
+    const uploadResult = await cloudinary.uploader
+      .upload(req.file.path, {
+        public_id: "profilePictures",
+      })
+      .catch((error) => {
+        console.log(error);
+        return res.status(500).json({
+          success: false,
+          message: "An Error has occured",
+        });
+      });
 
-//     console.log(uploadResult);
-//   } catch (error) {
-//     console.log(error);
-//     res.json({
-//       success: false,
-//       message: "Could not upload your image",
-//     });
-//     next(error);
-//   }
-// });
+    console.log(uploadResult);
+  } catch (error) {
+    console.log(error);
+    res.json({
+      success: false,
+      message: "Could not upload your image",
+    });
+    next(error);
+  }
+});
 
-// export default router;
+export default router;
 
 import User from "../models/user.model.js";
 import generateToken from "../utils/generateToken.js";
